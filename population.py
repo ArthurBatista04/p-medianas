@@ -14,7 +14,19 @@ def evaluate(population):
         solution.fitness()
 
 
-def tournament(population):
-    number = int(n/10)
-    for i in number:
-        indiviual = random.uniform(0, n)
+def selection(population):
+    picks = []
+    k = 4
+    for i in range(k):
+        indice = int(random.uniform(0, n))
+        picks.append(population[indice])
+    max = picks[0]
+    secondmax = picks[1]
+    for i in range(2, k):
+        if picks[i].fitness > max.fitness:
+            secondmax = max
+            max = picks[i]
+        else:
+            if picks[i].fitness > secondmax.fitness:
+                secondmax = picks[i]
+    return max, secondmax

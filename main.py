@@ -1,4 +1,4 @@
-from population import generateRandomSample, evaluate
+from population import generateRandomSample, evaluate, selection
 from vertice import Vertice
 
 
@@ -19,3 +19,4 @@ with open('input.txt') as file:
 baseGenes, vertices, medians = inputParse(lines)
 population = generateRandomSample(baseGenes, vertices, medians)
 evaluate(population)
+father, mother = selection(population)
