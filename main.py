@@ -1,5 +1,6 @@
-from population import generateRandomSample, evaluate, selection
+from genericAlgorithmFunctions import generateRandomSample, evaluate, selection, crossingOver
 from vertice import Vertice
+from copy import deepcopy
 
 
 def inputParse(input):
@@ -20,3 +21,7 @@ baseGenes, vertices, medians = inputParse(lines)
 population = generateRandomSample(baseGenes, vertices, medians)
 evaluate(population)
 father, mother = selection(population)
+child = crossingOver(father, mother, deepcopy(baseGenes))
+print(father.fitness)
+print(mother.fitness)
+print(child.fitness)
