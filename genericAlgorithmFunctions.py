@@ -34,6 +34,18 @@ def selection(population):
     return max, secondmax
 
 
+def mutation(childGenes, allGenes):
+    raffle = random.randrange(0, 2)
+    if raffle == 1:
+        geneId = random.choice(list(childGenes))
+        del childGenes[geneId]
+        while (len(childGenes) != 12):
+            newPos = random.randrange(0, len(allGenes))
+            newGene = allGenes[newPos]
+            if newGene.id not in childGenes:
+                childGenes[newGene.id] = newGene
+
+
 def crossingOver(father, mother, genes):
     childGenes = {}
     for fatherMedianId in father.medians:
@@ -50,6 +62,7 @@ def crossingOver(father, mother, genes):
         if (len(childGenes) != 12) and (indice not in childGenes):
             childGenes[indice] = father.medians[indice]
             father.medians[indice].cap = father.medians[indice].capReal
+    mutation(childGenes, genes)
     child = Solution()
     child.initChild(childGenes, genes)
     return child
