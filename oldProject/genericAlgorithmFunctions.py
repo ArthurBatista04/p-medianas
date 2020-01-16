@@ -7,7 +7,6 @@ n = 100
 
 
 def generateRandomSample(genes, numVerties, numMedians):
-
     return [Solution(deepcopy(genes), int(numVerties), int(numMedians)) for i in range(n)]
 
 
@@ -34,35 +33,38 @@ def selection(population):
     return max, secondmax
 
 
-def mutation(childGenes, allGenes):
+def mutation(childGenes, allGenes, medians):
     raffle = random.randrange(0, 2)
     if raffle == 1:
         geneId = random.choice(list(childGenes))
         del childGenes[geneId]
-        while (len(childGenes) != 12):
+        while (len(childGenes) != medians):
             newPos = random.randrange(0, len(allGenes))
             newGene = allGenes[newPos]
             if newGene.id not in childGenes:
                 childGenes[newGene.id] = newGene
 
 
-def crossingOver(father, mother, genes):
+def crossingOver(father, mother, genes, medians):
     childGenes = {}
+    assert(len(mother.medians) == medians)
+    assert(len(father.medians) == medians)
     for fatherMedianId in father.medians:
         for motherMedianId in mother.medians:
             if fatherMedianId == motherMedianId:
-                childGenes[fatherMedianId] = father.medians[fatherMedianId]
-                father.medians[fatherMedianId].cap = father.medians[fatherMedianId].capReal
-    while len(childGenes) != 12:
+                childGenes[fatherMedianId] = deepcopy(
+                    father.medians[fatherMedianId])
+                childGenes[fatherMedianId].cap = father.medians[fatherMedianId].capReal
+    while len(childGenes) != medians:
         indice = random.choice(list(mother.medians))
         if indice not in childGenes:
-            childGenes[indice] = mother.medians[indice]
-            mother.medians[indice].cap = mother.medians[indice].capReal
+            childGenes[indice] = deepcopy(mother.medians[indice])
+            childGenes[indice].cap = childGenes[indice].capReal
         indice = random.choice(list(father.medians))
-        if (len(childGenes) != 12) and (indice not in childGenes):
-            childGenes[indice] = father.medians[indice]
-            father.medians[indice].cap = father.medians[indice].capReal
-    mutation(childGenes, genes)
+        if (len(childGenes) != medians) and (indice not in childGenes):
+            childGenes[indice] = deepcopy(father.medians[indice])
+            childGenes[indice].cap = childGenes[indice].capReal
+    mutation(childGenes, genes, medians)
     child = Solution()
     child.initChild(childGenes, genes)
     return child
