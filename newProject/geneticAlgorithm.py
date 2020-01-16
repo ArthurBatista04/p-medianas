@@ -39,14 +39,15 @@ def selection(population):
 
 def mutation(childMedians, allVertices, numMedians):
     choice = random.randrange(0, 2)
-    chosenPostion = random.randrange(0, len(allVertices)-1)
     modifiedMedian = random.randrange(0, len(childMedians))
     if choice == 1:
         childMedians.pop(modifiedMedian)
+        chosenPostion = random.randrange(0, len(allVertices))
         while len(childMedians) != numMedians:
             newMedian = allVertices.pop(chosenPostion)
             if validateMedians(childMedians, newMedian):
                 childMedians.append(newMedian)
+            chosenPostion = random.randrange(0, len(allVertices))
 
 
 def crossingOver(father, mother, allVertices):
@@ -75,6 +76,8 @@ def crossingOver(father, mother, allVertices):
 
     child = Solution()
     mutation(childMedians, copy.deepcopy(allVertices), numMedians)
+    for i in childMedians:
+        assert(i.cap == i.capReal)
     child.initChild(childMedians, copy.deepcopy(allVertices))
     return child
 
