@@ -58,20 +58,6 @@ class Solution(object):
                 yMedian = median.y
                 self.fitness += rest.distance(
                     xMedian, yMedian)
-        # if self.fitness < 660:
-        #     print(self.fitness)
-        #     leng = 0
-        #     for pos, i in enumerate(medians):
-        #         median = self.getMedianById(i)
-        #         print('mediana: ' + str(pos))
-        #         print('Posicao x y: ', end=" ")
-        #         print('(', median.x, ',', median.y, ')')
-        #         print('Ligacoes')
-        #         for j in medians[i]:
-        #             print('Posicao x y: ', end=" ")
-        #             print('(', j.x, ',', j.y, ')')
-        #         print()
-        #     exit()
         for vertice in self.medians:
             vertice.cap = vertice.capReal
         for vertice in self.restOfVertices:
