@@ -19,6 +19,7 @@ class Solution(object):
         self.restOfVertices = vertices
 
     def initChild(self, medians, allVertices):
+
         for median in medians:
             for pos, vertice in enumerate(allVertices):
                 if vertice.id == median.id:

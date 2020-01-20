@@ -2,6 +2,7 @@ from vertice import Vertice
 from geneticAlgorithm import generateRandomPopulation, populationFitness, selection, crossingOver
 import copy
 import math
+from localSearch import localSearch
 
 
 def inputParse():
@@ -40,12 +41,13 @@ population = generateRandomPopulation(
     copy.deepcopy(vertices), numVertices, numMedians)
 populationFitness(population)
 fit = getWeakestFitness(population)
-for i in range(1000):
+for i in range(50):
     father, mother = selection(population)
     child = crossingOver(father, mother, copy.deepcopy(vertices))
     indice, strongestFit = getStrongestFitness(population)
     if child.fitness < strongestFit:
+        optChild = localSearch(child, copy.deepcopy(vertices))
         population.pop(indice)
-        population.append(child)
+        population.append(optChild)
 fit = getWeakestFitness(population)
 print(fit)
