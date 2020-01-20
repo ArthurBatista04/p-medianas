@@ -41,7 +41,7 @@ population = generateRandomPopulation(
     copy.deepcopy(vertices), numVertices, numMedians)
 populationFitness(population)
 fit = getWeakestFitness(population)
-for i in range(50):
+for i in range(10):
     father, mother = selection(population)
     child = crossingOver(father, mother, copy.deepcopy(vertices))
     indice, strongestFit = getStrongestFitness(population)
@@ -49,5 +49,6 @@ for i in range(50):
         optChild = localSearch(child, copy.deepcopy(vertices))
         population.pop(indice)
         population.append(optChild)
+
 fit = getWeakestFitness(population)
 print(fit)

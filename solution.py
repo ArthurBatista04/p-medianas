@@ -32,6 +32,7 @@ class Solution(object):
         restOfVertices = self.restOfVertices
         medians = self.medians
         distances = {median.id: [] for median in medians}
+        isValid = True
         for pos, rest in enumerate(restOfVertices):
             min = math.inf
             newMedianId = None
@@ -39,10 +40,14 @@ class Solution(object):
                 if (rest.distance(median.x, median.y) < min) and (rest.demand <= median.cap):
                     min = rest.distance(median.x, median.y)
                     newMedianId = median.id
-            distances[newMedianId].append(rest)
-            median = self.getMedianById(newMedianId)
-            median.cap -= rest.demand
+            if newMedianId:
+                distances[newMedianId].append(rest)
+                median = self.getMedianById(newMedianId)
+                median.cap -= rest.demand
+            else:
+                isValid = False
         self.distances = distances
+        return isValid
 
     def getMedianById(self, id):
         for median in (self.medians):
@@ -50,15 +55,18 @@ class Solution(object):
                 return median
 
     def calculateFitness(self):
-        self.defineMinimalDistance()
-        medians = self.distances
-        for medianId in medians:
-            for rest in medians[medianId]:
-                median = self.getMedianById(medianId)
-                xMedian = median.x
-                yMedian = median.y
-                self.fitness += rest.distance(
-                    xMedian, yMedian)
+        isValid = self.defineMinimalDistance()
+        if isValid:
+            medians = self.distances
+            for medianId in medians:
+                for rest in medians[medianId]:
+                    median = self.getMedianById(medianId)
+                    xMedian = median.x
+                    yMedian = median.y
+                    self.fitness += rest.distance(
+                        xMedian, yMedian)
+        else:
+            self.fitness = math.inf
         for vertice in self.medians:
             vertice.cap = vertice.capReal
         for vertice in self.restOfVertices:
