@@ -38,12 +38,15 @@ def getStrongestFitness(population):
     return strongestIndice, strongest
 
 
-def genImage(x, withLocalSearch, withoutLocalSearch):
+def genImage(x, withLocalSearch, withoutLocalSearch, fitWithBL, fitWithoutBL):
     plt.plot(x, withLocalSearch, label='Com busca local')
     plt.plot(x, withoutLocalSearch, label='Sem busca local')
     # Add a title
-    plt.title('Fitness por Geração')
-
+    fit_min = "FIT_MIN = " + str(fitWithoutBL)
+    fit_min_bl = "FIT_MIN_BL = " + str(fitWithBL)
+    plt.title('Fitness por Geração no Caso SJC1')
+    plt.figtext(.5, .7, fit_min)
+    plt.figtext(.5, .8, fit_min_bl)
     # Add X and y Label
     plt.xlabel('Geração')
     plt.ylabel('Fitness')
@@ -91,6 +94,8 @@ for i in range(1000):
     withLocalSearch.append(fit)
     withoutLocalSearch.append(fit2)
 
+fit = getWeakestFitness(populationWithLocalSearch)
+fit2 = getWeakestFitness(populationWithoutLocalSearch)
 x = [i for i in range(1001)]
 
-genImage(x, withLocalSearch, withoutLocalSearch)
+genImage(x, withLocalSearch, withoutLocalSearch, int(fit), int(fit2))
