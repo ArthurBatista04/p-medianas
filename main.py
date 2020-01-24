@@ -3,6 +3,8 @@ from geneticAlgorithm import generateRandomPopulation, populationFitness, select
 import copy
 import math
 from localSearch import localSearch
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def inputParse():
@@ -36,19 +38,59 @@ def getStrongestFitness(population):
     return strongestIndice, strongest
 
 
+def genImage(x, withLocalSearch, withoutLocalSearch):
+    plt.plot(x, withLocalSearch, label='Com busca local')
+    plt.plot(x, withoutLocalSearch, label='Sem busca local')
+    # Add a title
+    plt.title('Fitness por Geração')
+
+    # Add X and y Label
+    plt.xlabel('Geração')
+    plt.ylabel('Fitness')
+
+    # Add a grid
+    plt.grid(alpha=.4, linestyle='--')
+
+    # Add a Legend
+    plt.legend()
+    plt.savefig('fitness.png')
+
+
+withLocalSearch = []
+withoutLocalSearch = []
+
 vertices, numVertices, numMedians = inputParse()
 population = generateRandomPopulation(
     copy.deepcopy(vertices), numVertices, numMedians)
 populationFitness(population)
 fit = getWeakestFitness(population)
-for i in range(10):
-    father, mother = selection(population)
+withLocalSearch.append(fit)
+withoutLocalSearch.append(fit)
+populationWithLocalSearch = copy.deepcopy(population)
+populationWithoutLocalSearch = copy.deepcopy(population)
+for i in range(1000):
+    father, mother = selection(populationWithLocalSearch)
+    father2, mother2 = selection(populationWithoutLocalSearch)
+
     child = crossingOver(father, mother, copy.deepcopy(vertices))
-    indice, strongestFit = getStrongestFitness(population)
+    child2 = crossingOver(father2, mother2, copy.deepcopy(vertices))
+
+    indice, strongestFit = getStrongestFitness(populationWithLocalSearch)
+    indice2, strongestFit2 = getStrongestFitness(populationWithoutLocalSearch)
     if child.fitness < strongestFit:
         optChild = localSearch(child, copy.deepcopy(vertices))
-        population.pop(indice)
-        population.append(optChild)
+        populationWithLocalSearch.pop(indice)
+        populationWithLocalSearch.append(optChild)
+    if child2.fitness < strongestFit2:
+        populationWithoutLocalSearch.pop(indice2)
+        populationWithoutLocalSearch.append(child2)
 
-fit = getWeakestFitness(population)
-print(fit)
+    fit = getWeakestFitness(populationWithLocalSearch)
+    fit2 = getWeakestFitness(populationWithoutLocalSearch)
+
+    withLocalSearch.append(fit)
+    withoutLocalSearch.append(fit2)
+
+x = [i for i in range(1001)]
+
+genImage(x, withLocalSearch, withoutLocalSearch)
