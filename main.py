@@ -57,19 +57,20 @@ def getStrongestFitness(population):
 #     plt.savefig('fitness.png')
 
 
-withLocalSearch = []
-withoutLocalSearch = []
+
 
 vertices, numVertices, numMedians = inputParse()
+
 population = generateRandomPopulation(
     copy.deepcopy(vertices), numVertices, numMedians)
 populationFitness(population)
+
 fit = getWeakestFitness(population)
-withLocalSearch.append(fit)
-withoutLocalSearch.append(fit)
+
 populationWithLocalSearch = copy.deepcopy(population)
 populationWithoutLocalSearch = copy.deepcopy(population)
-for i in range(500):
+
+for i in range(10):
     father, mother = selection(populationWithLocalSearch)
     father2, mother2 = selection(populationWithoutLocalSearch)
 
@@ -89,10 +90,8 @@ for i in range(500):
     fit = getWeakestFitness(populationWithLocalSearch)
     fit2 = getWeakestFitness(populationWithoutLocalSearch)
 
-    withLocalSearch.append(fit)
-    withoutLocalSearch.append(fit2)
 
 fit = getWeakestFitness(populationWithLocalSearch)
 fit2 = getWeakestFitness(populationWithoutLocalSearch)
-print('With localsearch', fit)
-print('Without localsearch', fit2)
+print('With localsearch: ', fit)
+print('Without localsearch: ', fit2)
