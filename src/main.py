@@ -48,7 +48,7 @@ fit = getWeakestFitness(population)
 populationWithLocalSearch = copy.deepcopy(population)
 populationWithoutLocalSearch = copy.deepcopy(population)
 
-for i in range(10):
+for i in range(500):
     father, mother = selection(populationWithLocalSearch)
     father2, mother2 = selection(populationWithoutLocalSearch)
 
